@@ -1,19 +1,12 @@
 html{
     font-size: 14px;
-    /* border-collapse: collapse; */
 }
 
-.a{
-    background: #4caf50;
-    border: 1px solid #1b5e20;
+.simulation{
+    padding: 0 !important;
 }
 
-.b{
-    background: #03a9f4;
-    border: 1px solid #01579b
-}
-
-.c{
-    background: #f44336;
-    border: 1px solid #d50000 
+.simulation i{
+    font-size: 18px;
+    color: black;
 }
