@@ -10,7 +10,7 @@
         <script> let dados = 
             <?php 
                 if(isset($_GET["escalonador"]))
-                    echo exec("./simulador/simulator ./simulador/entrada2.txt {$_GET["escalonador"]} 2", $out);
+                    echo exec("./simulador/simulator ./simulador/entrada.txt {$_GET["escalonador"]} 2", $out);
                 else
                     echo "''"; 
             ?>;
@@ -63,7 +63,7 @@
                 </table>
             </div>
             <div class="row mt-3">
-                <div class="col-6" id="chart"></div>
+                <div class="col" id="chart" style="height: 400px;"></div>
             </div>
         </div>
     </body>

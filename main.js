@@ -4,7 +4,8 @@ let len = dados.length,
         elementos_fim = {};
         elementos_inicio = {};
         pattern = ["#3366cc", "#dc3912", "#ff9900", "#109618", "#990099", "#0099c6", "#dd4477", "#66aa00", "#b82e2e", "#316395", "#3366cc", "#994499", "#22aa99", "#aaaa11", "#6633cc", "#e67300", "#8b0707", "#651067", "#329262", "#5574a6", "#3b3eac", "#b77322", "#16d620", "#b91383", "#f4359e", "#9c5935", "#a9c413", "#2a778d", "#668d1c", "#bea413", "#0c5922", "#743411"];
-        pattern_order = []
+        pattern_order = [],
+        dados_chart = [];
 
 Simulador = {
     time: 0,
@@ -36,19 +37,19 @@ Simulador = {
     },
     eventos: () => {
         $(".play").click(() => {
-            Simulador.play()
+            Simulador.play();
         });
 
         $(".pause").click(() => {
-            Simulador.pause()
+            Simulador.pause();
         });
 
         $(".backward").click(() => {
-            Simulador.backward()
+            Simulador.backward();
         });
 
         $(".forward").click(() => {
-            Simulador.forward()
+            Simulador.forward();
         })
     }
 };
@@ -92,6 +93,8 @@ simulador = (time) => {
         )
     });
 
+    drawChart(time)
+
     return ret;
 }
 
@@ -115,6 +118,20 @@ shadeColor = (color, percent) => {
     return "#"+RR+GG+BB;
 }
 
+drawChart = (time = dados.length) => {
+    var data = google.visualization.arrayToDataTable(dados_chart.slice(0, time + 1));
+
+    var options = {
+        title: 'Dados da performance',
+        legend: { position: 'top' },
+        vAxis: { title: 'Porcentagem'},
+        hAxis: { title: 'Clocks'}
+    };
+
+    var chart = new google.visualization.LineChart(document.getElementById('chart'));
+    chart.draw(data, options);
+}
+
 $(() => {
     if(dados){
         dados.pop(dados.length - 1)
@@ -135,8 +152,6 @@ $(() => {
         });
 
         $(".badge").text(dados.length);
-
-        elementos_sin = simulador(dados.length)
     }
 
     Simulador.eventos();
@@ -146,4 +161,33 @@ $(() => {
         $('#escalonador-form').val(e.target.value)
         $('form').submit();
     })
+
+    // Charts
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    dados_chart = [Object.keys(elementos_len)];
+    dados_chart[0].unshift("Clocks")
+
+    dados.forEach((e, i) => {
+        dados_chart.push(
+            dados_chart[0].map((a,j) => {
+                if(a == "Clocks")
+                    return i+1
+
+                if(dados[i] == a && i == 0)
+                    return 1/elementos_len[a]*100
+                else if(i == 0)
+                    return 0
+                
+                valor_anterior = dados_chart[i][j]
+                
+                if(dados[i] == a){
+                    valor_anterior += 1/elementos_len[a]*100
+                }
+
+                return valor_anterior
+            })
+        );
+    });
 })
