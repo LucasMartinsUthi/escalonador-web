@@ -10,3 +10,7 @@ html{
     font-size: 18px;
     color: black;
 }
+
+.form{
+    padding: 0px !important;
+}

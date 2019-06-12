@@ -118,7 +118,12 @@ shadeColor = (color, percent) => {
 }
 
 drawChart = (time = dados.length) => {
-    var data = google.visualization.arrayToDataTable(dados_chart.slice(0, time + 1));
+    try {
+        var data = google.visualization.arrayToDataTable(dados_chart.slice(0, time + 1));
+     }
+     catch (e) {
+         return false;
+     }
 
     var options = {
         title: 'Dados da performance',
@@ -151,44 +156,44 @@ $(() => {
         });
 
         $(".badge").text(dados.length);
+
+        dados_chart = [Object.keys(elementos_len)];
+        dados_chart[0].unshift("Clocks")
+
+        dados.forEach((e, i) => {
+            dados_chart.push(
+                dados_chart[0].map((a,j) => {
+                    if(a == "Clocks")
+                        return i+1
+
+                    if(dados[i] == a && i == 0)
+                        return 1/elementos_len[a]*100
+                    else if(i == 0)
+                        return 0
+                    
+                    valor_anterior = dados_chart[i][j]
+                    
+                    if(dados[i] == a){
+                        valor_anterior += 1/elementos_len[a]*100
+                    }
+
+                    return valor_anterior
+                })
+            );
+        });
+
+        Simulador.eventos();
+
+        // Charts
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(drawChart);
+
+        simulador(dados.length)
     }
-
-    dados_chart = [Object.keys(elementos_len)];
-    dados_chart[0].unshift("Clocks")
-
-    dados.forEach((e, i) => {
-        dados_chart.push(
-            dados_chart[0].map((a,j) => {
-                if(a == "Clocks")
-                    return i+1
-
-                if(dados[i] == a && i == 0)
-                    return 1/elementos_len[a]*100
-                else if(i == 0)
-                    return 0
-                
-                valor_anterior = dados_chart[i][j]
-                
-                if(dados[i] == a){
-                    valor_anterior += 1/elementos_len[a]*100
-                }
-
-                return valor_anterior
-            })
-        );
-    });
-
-    Simulador.eventos();
 
     // Eventos
     $('.escalonador-btn').click((e)=>{
         $('#escalonador-form').val(e.target.value)
         $('form').submit();
     })
-
-    // Charts
-    google.charts.load('current', {'packages':['corechart']});
-    google.charts.setOnLoadCallback(drawChart);
-
-    simulador(dados.length)
 })

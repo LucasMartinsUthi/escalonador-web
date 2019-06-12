@@ -10,7 +10,7 @@
         <script> let dados = 
             <?php 
                 if(isset($_GET["escalonador"]))
-                    echo exec("./simulador/simulator ./simulador/entrada.txt {$_GET["escalonador"]} 2", $out);
+                    echo exec("./simulador/simulator ./simulador/entrada{$_GET["arquivo"]}.txt {$_GET["escalonador"]} {$_GET["quantum"]}", $out);
                 else
                     echo "''"; 
             ?>;
@@ -20,7 +20,19 @@
     <body>
         <div class="container">
             <div class="row mt-4">
-                <form action="" methos="get"><input type="hidden" id="escalonador-form" name="escalonador"></form>
+                <div class="col-12 form">
+                    <form action="" methos="get">
+                        <input type="hidden" id="escalonador-form" name="escalonador">
+                        <div class="form-group">
+                            <label for="arquivo">Numero do Arquivo:</label>
+                            <input type="text" class="form-control" name="arquivo" value="2">
+                        </div>
+                        <div class="form-group">
+                            <label for="quantum">Quantum:</label>
+                            <input type="text" class="form-control" name="quantum" value="2">
+                        </div>
+                    </form>
+                </div>
                 <button type="button" class="btn btn-success mr-4 escalonador-btn" value="FCFS">FCFS</button> 
                 <button type="button" class="btn btn-warning mr-4 escalonador-btn" value="SJF">SJF</button>
                 <button type="button" class="btn btn-primary mr-4 escalonador-btn" value="RR">RR</button>
